@@ -32,5 +32,7 @@
 If you have questions, please feel free to contact 
 
 [Agrig33](https://github.com/Agrig33)
-[Clowenthal] (https://github.com/Clowenthal)
-[giovannamottad] (https://github.com/giovannamottad)
+
+[Clowenthal](https://github.com/Clowenthal)
+
+[giovannamottad](https://github.com/giovannamottad)
