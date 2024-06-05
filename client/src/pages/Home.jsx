@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 
-import ThoughtList from '../components/ThoughtList';
-import ThoughtForm from '../components/ThoughtForm';
+import BlogPostList from '../components/BlogPostList';
+import BlogPostDetails from '../components/BlogPostDetails';
 
 import { QUERY_THOUGHTS } from '../utils/queries';
 
@@ -16,15 +16,15 @@ const Home = () => {
           className="col-12 col-md-10 mb-3 p-3"
           style={{ border: '1px dotted #1a1a1a' }}
         >
-          <ThoughtForm />
+          <BlogPostDetails />
         </div>
         <div className="col-12 col-md-8 mb-3">
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <ThoughtList
+            <BlogPostList
               thoughts={thoughts}
-              title="Some Feed for Thought(s)..."
+              title="Tell Us About Your Passion With Music. Share & Comment..."
             />
           )}
         </div>

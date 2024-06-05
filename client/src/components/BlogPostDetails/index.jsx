@@ -7,7 +7,7 @@ import { QUERY_THOUGHTS } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const ThoughtForm = () => {
+const BlogPostDetails = () => {
   const [thoughtText, setThoughtText] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
@@ -48,7 +48,7 @@ const ThoughtForm = () => {
 
   return (
     <div>
-      <h3>What's on your techy mind?</h3>
+      <h3>Share your love for music</h3>
 
       {Auth.loggedIn() ? (
         <>
@@ -66,7 +66,7 @@ const ThoughtForm = () => {
             <div className="col-12 col-lg-9">
               <textarea
                 name="thoughtText"
-                placeholder="Here's a new thought..."
+                placeholder="Music, Artist, Festival..."
                 value={thoughtText}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
@@ -76,7 +76,7 @@ const ThoughtForm = () => {
 
             <div className="col-12 col-lg-3">
               <button className="btn btn-primary btn-block py-3" type="submit">
-                Add Thought
+                Add Blog Post
               </button>
             </div>
             {error && (
@@ -88,7 +88,7 @@ const ThoughtForm = () => {
         </>
       ) : (
         <p>
-          You need to be logged in to share your thoughts. Please{' '}
+          Login or signup to join the community{' '}
           <Link to="/login">login</Link> or <Link to="/signup">signup.</Link>
         </p>
       )}
@@ -96,4 +96,4 @@ const ThoughtForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default BlogPostDetails;
