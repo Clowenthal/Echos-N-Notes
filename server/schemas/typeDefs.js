@@ -9,8 +9,8 @@ const typeDefs = `
 
   type Thought {
     _id: ID
-    thoughtText: String
-    thoughtAuthor: String
+    blogComment: String
+    blogAuthor: String
     createdAt: String
     comments: [Comment]!
   }
@@ -37,7 +37,7 @@ const typeDefs = `
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addThought(thoughtText: String!, thoughtAuthor: String!): Thought
+    addThought(blogComment: String!, blogAuthor: String!): Thought
     addComment(
       thoughtId: ID!
       commentText: String!
