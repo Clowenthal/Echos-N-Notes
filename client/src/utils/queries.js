@@ -8,30 +8,30 @@ export const QUERY_USER = gql`
       email
       thoughts {
         _id
-        thoughtText
+        blogComment
         createdAt
       }
     }
   }
 `;
 
-export const QUERY_THOUGHTS = gql`
-  query getThoughts {
-    thoughts {
+export const QUERY_BLOGS = gql`
+  query getBlogs {
+    blogs {
       _id
-      thoughtText
-      thoughtAuthor
+      blogComment
+      blogAuthor
       createdAt
     }
   }
 `;
 
-export const QUERY_SINGLE_THOUGHT = gql`
-  query getSingleThought($thoughtId: ID!) {
+export const QUERY_POST_BLOG = gql`
+  query getPostBlog($thoughtId: ID!) {
     thought(thoughtId: $thoughtId) {
       _id
-      thoughtText
-      thoughtAuthor
+      blogComment
+      blogAuthor
       createdAt
       comments {
         _id

@@ -1,20 +1,20 @@
-const { User, Thought } = require('../models');
+const { User, BlogPost } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate('thoughts');
+      return User.find().populate('posts');
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('thoughts');
+      return User.findOne({ username }).populate('blogposts');
     },
-    thoughts: async (parent, { username }) => {
+    blogposts: async (parent, { username }) => {
       const params = username ? { username } : {};
-      return Thought.find(params).sort({ createdAt: -1 });
+      return BlogPost.find(params).sort({ createdAt: -1 });
     },
-    thought: async (parent, { thoughtId }) => {
-      return Thought.findOne({ _id: thoughtId });
+    blogpost: async (parent, { blogpostId }) => {
+      return BlogPost.findOne({ _id: postId });
     },
   },
 
@@ -41,12 +41,12 @@ const resolvers = {
 
       return { token, user };
     },
-    addThought: async (parent, { thoughtText, thoughtAuthor }) => {
-      const thought = await Thought.create({ thoughtText, thoughtAuthor });
+    addThought: async (parent, { blogComment, blogAuthor }) => {
+      const thought = await Post.create({ blogComment, blogAuthor });
 
       await User.findOneAndUpdate(
-        { username: thoughtAuthor },
-        { $addToSet: { thoughts: thought._id } }
+        { username: blogAuthor },
+        { $addToSet: { posts: thought._id } }
       );
 
       return thought;

@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { ADD_THOUGHT } from '../../utils/mutations';
+import { ADD_POST } from '../../utils/mutations';
 import { QUERY_THOUGHTS } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
 const BlogPostDetails = () => {
-  const [thoughtText, setThoughtText] = useState('');
+  const [blogComment, setBlogComment] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addThought, { error }] = useMutation
+  const [addPOST, { error }] = useMutation
   (ADD_THOUGHT, {
     refetchQueries: [
       QUERY_THOUGHTS,
@@ -26,12 +26,12 @@ const BlogPostDetails = () => {
     try {
       const { data } = await addThought({
         variables: {
-          thoughtText,
-          thoughtAuthor: Auth.getProfile().data.username,
+          blogComment,
+          blogAuthor: Auth.getProfile().data.username,
         },
       });
 
-      setThoughtText('');
+      setBlogComment('');
     } catch (err) {
       console.error(err);
     }
@@ -40,8 +40,8 @@ const BlogPostDetails = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'thoughtText' && value.length <= 280) {
-      setThoughtText(value);
+    if (name === 'blogComment' && value.length <= 280) {
+      setBlogComment(value);
       setCharacterCount(value.length);
     }
   };
@@ -65,9 +65,9 @@ const BlogPostDetails = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="thoughtText"
+                name="blogComment"
                 placeholder="Music, Artist, Festival..."
-                value={thoughtText}
+                value={blogComment}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
