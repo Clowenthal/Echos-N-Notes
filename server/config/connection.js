@@ -1,5 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');  // Import mongoose
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/programming-thoughts');
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/echosnnotes', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    });
+    console.log('MongoDB connected');  // Log success message if connected
+  } catch (err) {
+    console.error(err.message);  // Log error message if connection fails
+    process.exit(1);  // Exit process with failure
+  }
+};
 
-module.exports = mongoose.connection;
+module.exports = connectDB;  // Export the connectDB function

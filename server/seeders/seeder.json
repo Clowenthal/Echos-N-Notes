@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "username": "john_doe",
+      "email": "john@example.com",
+      "password": "password123"
+    },
+    {
+      "username": "jane_doe",
+      "email": "jane@example.com",
+      "password": "password123"
+    }
+  ],
+  "blogPosts": [
+    {
+      "title": "First Blog Post",
+      "content": "This is the content of the first blog post.",
+      "userEmail": "john@example.com"
+    },
+    {
+      "title": "Second Blog Post",
+      "content": "This is the content of the second blog post.",
+      "userEmail": "jane@example.com"
+    }
+  ]
+}

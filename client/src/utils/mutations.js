@@ -1,63 +1,45 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client';  // Import gql function from Apollo Client
 
-export const LOGIN_USER = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
+// GraphQL mutation for login
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password)
+  }
+`;
+
+// GraphQL mutation for registration
+export const REGISTER = gql`
+  mutation Register($username: String!, $email: String!, $password: String!) {
+    register(username: $username, email: $email, password: $password) {
+      id
+    }
+  }
+`;
+
+// GraphQL mutation to add a new blog post
+export const ADD_BLOG_POST = gql`
+  mutation AddBlogPost($userId: ID!, $title: String!, $content: String!) {
+    addBlogPost(userId: $userId, title: $title, content: $content) {
+      id
+      title
+      content
+      date
       user {
-        _id
         username
       }
     }
   }
 `;
 
-export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-      }
-    }
-  }
-`;
-
-export const ADD_POST = gql`
-  mutation addPost($blogComment: String!, $blogAuthor: String!) {
-    addPost(blogComment: $blogComment, blogAuthor: $blogAuthor) {
-      _id
-      blogComment
-      blogAuthor
-      createdAt
-      comments {
-        _id
-        commentText
-      }
-    }
-  }
-`;
-
+// GraphQL mutation to add a comment to a blog post
 export const ADD_COMMENT = gql`
-  mutation addComment(
-    $postId: ID!
-    $commentText: String!
-    $commentAuthor: String!
-  ) {
-    addComment(
-      thoughtId: $postId
-      commentText: $commentText
-      commentAuthor: $commentAuthor
-    ) {
-      _id
-      blogComment
-      blogAuthor
-      createdAt
-      comments {
-        _id
-        commentText
-        createdAt
+  mutation AddComment($postId: ID!, $userId: ID!, $content: String!) {
+    addComment(postId: $postId, userId: $userId, content: $content) {
+      id
+      content
+      date
+      user {
+        username
       }
     }
   }

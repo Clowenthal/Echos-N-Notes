@@ -1,33 +1,13 @@
-const db = require('../config/connection');
-const { User, BlogPost } = require('../models');
-const userSeeds = require('./userSeeds.json');
-const thoughtSeeds = require('./blogSeeds.json');
-const cleanDB = require('./cleanDB');
+const mongoose = require('mongoose');  // Import mongoose
+const connectDB = require('../config/connection');  // Import database connection function
+const seedUsers = require('./userSeeder');  // Import user seeder
+const seedBlogPosts = require('./blogPostSeeder');  // Import blog post seeder
 
-db.once('open', async () => {
-  try {
-    await cleanDB('BlogPost', 'blogposts');
+const seedDatabase = async () => {  // Function to seed the database
+  await connectDB();  // Connect to the database
+  await seedUsers();  // Seed users
+  await seedBlogPosts();  // Seed blog posts
+  mongoose.connection.close();  // Close the database connection
+};
 
-    await cleanDB('User', 'users');
-
-    await User.create(userSeeds);
-
-    for (let i = 0; i < blogSeeds.length; i++) {
-      const { _id, blogAuthor } = await BlogPost.create(blogSeeds[i]);
-      const user = await User.findOneAndUpdate(
-        { username: blogAuthor },
-        {
-          $addToSet: {
-            posts: _id,
-          },
-        }
-      );
-    }
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
-  }
-
-  console.log('all done!');
-  process.exit(0);
-});
+seedDatabase();  // Call the seedDatabase function

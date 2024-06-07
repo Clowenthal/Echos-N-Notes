@@ -1,99 +1,31 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import React from 'react';  // Import React library
+import { useQuery } from '@apollo/client';  // Import useQuery hook from Apollo Client
+import { useParams } from 'react-router-dom';  // Import useParams to get URL parameters
+import { GET_BLOG_POST } from '../utils/queries';  // Import GET_BLOG_POST query
 
-import { ADD_POST } from '../../utils/mutations';
-import { QUERY_BLOGS } from '../../utils/queries';
+function BlogPostDetails() {
+  const { id } = useParams();  // Get the blog post ID from the URL parameters
+  const { loading, error, data } = useQuery(GET_BLOG_POST, { variables: { id } });  // Use Apollo Client's useQuery hook to fetch data
 
-import Auth from '../../utils/auth';
+  if (loading) return <p>Loading...</p>;  // Show loading message while fetching
+  if (error) return <p>Error: {error.message}</p>;  // Show error message if fetch fails
 
-const BlogPostDetails = () => {
-  const [blogComment, setBlogComment] = useState('');
-
-  const [characterCount, setCharacterCount] = useState(0);
-
-  const [addPOST, { error }] = useMutation
-  (ADD_POST, {
-    refetchQueries: [
-      QUERY_BLOGS,
-      'getBlogs'
-    ]
-  });
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const { data } = await addPOST({
-        variables: {
-          blogComment,
-          blogAuthor: Auth.getProfile().data.username,
-        },
-      });
-
-      setBlogComment('');
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name === 'blogComment' && value.length <= 280) {
-      setBlogComment(value);
-      setCharacterCount(value.length);
-    }
-  };
+  const post = data.blogPost;  // Get the blog post data from the query result
 
   return (
     <div>
-      <h3>Share your love for music</h3>
-
-      {Auth.loggedIn() ? (
-        <>
-          <p
-            className={`m-0 ${
-              characterCount === 280 || error ? 'text-danger' : ''
-            }`}
-          >
-            Character Count: {characterCount}/280
-          </p>
-          <form
-            className="flex-row justify-center justify-space-between-md align-center"
-            onSubmit={handleFormSubmit}
-          >
-            <div className="col-12 col-lg-9">
-              <textarea
-                name="blogComment"
-                placeholder="Music, Artist, Festival..."
-                value={blogComment}
-                className="form-input w-100"
-                style={{ lineHeight: '1.5', resize: 'vertical' }}
-                onChange={handleChange}
-              ></textarea>
-            </div>
-
-            <div className="col-12 col-lg-3">
-              <button className="btn btn-primary btn-block py-3" type="submit">
-                Add Blog Post
-              </button>
-            </div>
-            {error && (
-              <div className="col-12 my-3 bg-danger text-white p-3">
-                {error.message}
-              </div>
-            )}
-          </form>
-        </>
-      ) : (
-        <p>
-          Login or signup to join the community{' '}
-          <Link to="/login">login</Link> or <Link to="/signup">signup.</Link>
-        </p>
-      )}
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+      <p>Posted by {post.user.username} on {new Date(post.date).toLocaleDateString()}</p>
+      <h2>Comments</h2>
+      {post.comments.map(comment => (  // Map over comments and render them
+        <div key={comment.id}>
+          <p>{comment.content}</p>
+          <p>Commented by {comment.user.username} on {new Date(comment.date).toLocaleDateString()}</p>
+        </div>
+      ))}
     </div>
   );
-};
+}
 
-export default BlogPostDetails;
+export default BlogPostDetails;  // Export BlogPostDetails component

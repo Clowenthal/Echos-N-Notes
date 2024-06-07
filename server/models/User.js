@@ -1,45 +1,10 @@
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');  // Import mongoose
 
-const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    match: [/.+@.+\..+/, 'Must match an email address!'],
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 5,
-  },
-  blogposts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Post',
-    },
-  ],
+const UserSchema = new mongoose.Schema({  // Define the User schema
+  username: { type: String, required: true, unique: true },  // Username field
+  email: { type: String, required: true, unique: true },  // Email field
+  password: { type: String, required: true },  // Password field
+  date: { type: Date, default: Date.now }  // Date field
 });
 
-userSchema.pre('save', async function (next) {
-  if (this.isNew || this.isModified('password')) {
-    const saltRounds = 10;
-    this.password = await bcrypt.hash(this.password, saltRounds);
-  }
-
-  next();
-});
-
-userSchema.methods.isCorrectPassword = async function (password) {
-  return bcrypt.compare(password, this.password);
-};
-
-const User = model('User', userSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', UserSchema);  // Export the User model
