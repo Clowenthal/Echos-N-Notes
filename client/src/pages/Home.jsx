@@ -3,11 +3,11 @@ import { useQuery } from '@apollo/client';
 import BlogPostList from '../components/BlogPostList';
 import BlogPostDetails from '../components/BlogPostDetails';
 
-import { QUERY_THOUGHTS } from '../utils/queries';
+import { QUERY_BLOGS } from '../utils/queries';
 
 const Home = () => {
-  const { loading, data } = useQuery(QUERY_THOUGHTS);
-  const thoughts = data?.thoughts || [];
+  const { loading, data } = useQuery(QUERY_BLOGS);
+  const posts = data?.posts || [];
 
   return (
     <main>

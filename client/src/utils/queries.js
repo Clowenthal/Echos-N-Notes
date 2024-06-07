@@ -27,8 +27,8 @@ export const QUERY_BLOGS = gql`
 `;
 
 export const QUERY_POST_BLOG = gql`
-  query getPostBlog($thoughtId: ID!) {
-    thought(thoughtId: $thoughtId) {
+  query getPostBlog($postId: ID!) {
+    blogpost(thoughtId: $thoughtId) {
       _id
       blogComment
       blogAuthor

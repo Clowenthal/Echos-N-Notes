@@ -9,7 +9,7 @@ import { QUERY_POST_BLOG } from '../utils/queries';
 
 const PostBlog = () => {
   // Use `useParams()` to retrieve value of the route parameter `:profileId`
-  const { thoughtId } = useParams();
+  const { postId } = useParams();
 
   const { loading, data } = useQuery(QUERY_POST_BLOG, {
     // pass URL parameter

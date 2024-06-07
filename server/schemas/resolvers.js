@@ -4,7 +4,7 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate('posts');
+      return User.find().populate('blogpost');
     },
     user: async (parent, { username }) => {
       return User.findOne({ username }).populate('blogposts');
@@ -41,19 +41,19 @@ const resolvers = {
 
       return { token, user };
     },
-    addThought: async (parent, { blogComment, blogAuthor }) => {
-      const thought = await Post.create({ blogComment, blogAuthor });
+    addPost: async (parent, { blogComment, blogAuthor }) => {
+      const post = await BlogPost.create({ blogComment, blogAuthor });
 
       await User.findOneAndUpdate(
         { username: blogAuthor },
-        { $addToSet: { posts: thought._id } }
+        { $addToSet: { posts: post._id } }
       );
 
-      return thought;
+      return post;
     },
-    addComment: async (parent, { thoughtId, commentText, commentAuthor }) => {
-      return Thought.findOneAndUpdate(
-        { _id: thoughtId },
+    addComment: async (parent, { postId, commentText, commentAuthor }) => {
+      return BlogPost.findOneAndUpdate(
+        { _id: postId },
         {
           $addToSet: { comments: { commentText, commentAuthor } },
         },
@@ -63,12 +63,12 @@ const resolvers = {
         }
       );
     },
-    removeThought: async (parent, { thoughtId }) => {
-      return Thought.findOneAndDelete({ _id: thoughtId });
+    removePost: async (parent, { postId }) => {
+      return BlogPost.findOneAndDelete({ _id: postId });
     },
-    removeComment: async (parent, { thoughtId, commentId }) => {
-      return Thought.findOneAndUpdate(
-        { _id: thoughtId },
+    removeComment: async (parent, { postId, commentId }) => {
+      return BlogPost.findOneAndUpdate(
+        { _id: postId },
         { $pull: { comments: { _id: commentId } } },
         { new: true }
       );

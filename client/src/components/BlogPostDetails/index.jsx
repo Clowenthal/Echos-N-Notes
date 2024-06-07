@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { ADD_POST } from '../../utils/mutations';
-import { QUERY_THOUGHTS } from '../../utils/queries';
+import { QUERY_BLOGS } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
@@ -13,10 +13,10 @@ const BlogPostDetails = () => {
   const [characterCount, setCharacterCount] = useState(0);
 
   const [addPOST, { error }] = useMutation
-  (ADD_THOUGHT, {
+  (ADD_POST, {
     refetchQueries: [
-      QUERY_THOUGHTS,
-      'getThoughts'
+      QUERY_BLOGS,
+      'getBlogs'
     ]
   });
 
@@ -24,7 +24,7 @@ const BlogPostDetails = () => {
     event.preventDefault();
 
     try {
-      const { data } = await addThought({
+      const { data } = await addPOST({
         variables: {
           blogComment,
           blogAuthor: Auth.getProfile().data.username,
