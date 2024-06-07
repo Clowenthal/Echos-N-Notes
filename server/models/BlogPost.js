@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');  // Import mongoose
-const dateFormat = require('../utils/dateFormat1');  // Import date formatting utility
+const dateFormat = require('../utils/dateFormat');  // Import date formatting utility
 
 const BlogPostSchema = new mongoose.Schema({  // Define the BlogPost schema
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // User field referencing User model

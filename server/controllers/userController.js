@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');  // Import bcrypt for hashing passwords
 const User = require('../models/User');  // Import User model
-const { signToken, AuthenticationError } = require('../utils/auth1');  // Import signToken and AuthenticationError from auth.js
+const { signToken, AuthenticationError } = require('../utils/auth');  // Import signToken and AuthenticationError from auth.js
 
 // Function to register a new user
 const registerUser = async (username, email, password) => {

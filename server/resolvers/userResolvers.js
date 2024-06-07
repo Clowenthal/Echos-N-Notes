@@ -1,21 +1,29 @@
-const userController = require('../controllers/userController');  // Import userController
+const userController = require('../controllers/userController');
 
-const userResolvers = {  // Define user resolvers
+const userResolvers = {
   Query: {
-    users: async () => await userController.getUsers(),  // Resolver to get all users
-    user: async (_, { id }) => await userController.getUserById(id),  // Resolver to get user by ID
+    users: {
+      type: new GraphQLList(UserType),
+      resolve: async () => await userController.getUsers(),
+    },
+    user: {
+      type: UserType,
+      args: { id: { type: GraphQLID } },
+      resolve: async (_, { id }) => await userController.getUserById(id),
+    },
   },
   Mutation: {
     register: async (_, { username, email, password }) => {
-      const { user, token } = await userController.registerUser(username, email, password);  // Register user and get token
-      return { token };  // Return token
+      const { user, token } = await userController.registerUser(username, email, password);
+      return token;
     },
     login: async (_, { email, password }) => {
-      const token = await userController.loginUser(email, password);  // Log in user and get token
-      return { token };  // Return token
+      const token = await userController.loginUser(email, password);
+      return token;
     },
   },
 };
 
-module.exports = userResolvers;  // Export user resolvers
+module.exports = userResolvers;
+
 

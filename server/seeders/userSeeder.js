@@ -6,6 +6,7 @@ const seedUsers = async () => {  // Function to seed users
   try {
     await User.deleteMany({});  // Delete all existing users
     for (const user of seedData.users) {  // Iterate over seed data
+      console.log('user', user);
       const salt = await bcrypt.genSalt(10);  // Generate salt for hashing password
       user.password = await bcrypt.hash(user.password, salt);  // Hash the password
       await new User(user).save();  // Save the user to the database
