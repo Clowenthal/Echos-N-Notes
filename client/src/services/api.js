@@ -7,3 +7,4 @@ const client = new GraphQLClient(import.meta.env.VITE_GRAPHQL_ENDPOINT, {  // Cr
 });
 
 export const request = (query, variables) => client.request(query, variables);  // Export request function
+
