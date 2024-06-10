@@ -3,9 +3,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from './App.jsx'
 import Home from './pages/Home';
-import Signup from './pages/Signup';
+import Register from './pages/Register';
 import Login from './pages/Login';
-import SingleThought from './pages/SingleThought';
+import PostBlog from './pages/PostBlog';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -21,11 +21,11 @@ const router = createBrowserRouter([
         path: '/login',
         element: <Login />
       }, {
-        path: '/signup',
-        element: <Signup />
+        path: '/register',
+        element: <Register />
       }, {
-        path: '/thoughts/:thoughtId',
-        element: <SingleThought />
+        path: '/blogPost/:blogPostId',
+        element: <PostBlog />
       }
     ]
   },

@@ -1,43 +1,59 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client';  // Import gql function from Apollo Client
 
-export const QUERY_USER = gql`
-  query user($username: String!) {
-    user(username: $username) {
+// GraphQL query to get all blog posts
+export const GET_BLOG_POSTS = gql`
+  query getBlogPosts {
+    getBlogPosts {
       _id
-      username
-      email
-      thoughts {
-        _id
-        blogComment
-        createdAt
+      title
+      content
+      author {
+        username
       }
-    }
-  }
-`;
-
-export const QUERY_THOUGHTS = gql`
-  query getThoughts {
-    thoughts {
-      _id
-      blogComment
-      blogAuthor
       createdAt
     }
   }
 `;
 
-export const QUERY_SINGLE_THOUGHT = gql`
-  query getSingleThought($thoughtId: ID!) {
-    thought(thoughtId: $thoughtId) {
+// GraphQL query to get a single blog post by ID
+export const GET_POST_BLOG = gql`
+  query getPostBlog($id: ID!) {
+    getPostBlog(id: $id) {
       _id
-      blogComment
-      blogAuthor
+      title
+      content
+      author {
+        username
+      }
       createdAt
       comments {
         _id
         commentText
         createdAt
+        username
       }
+    }
+  }
+`;
+
+// GraphQL query to get all users
+export const GET_USERS = gql`
+  {
+    users {
+      _id
+      username
+      email
+    }
+  }
+`;
+
+// GraphQL query to get a single user by ID
+export const GET_USER = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      _id
+      username
+      email
     }
   }
 `;

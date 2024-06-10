@@ -12,14 +12,14 @@ const Header = () => {
       <div className="container flex-row justify-space-between-lg justify-center align-center">
         <div>
           <Link className="text-light" to="/">
-            <h1 className="m-0">Echoes & Notes</h1>
+            <h1 className="m-0">Echoes N Notes</h1>
           </Link>
-          <p className="m-0">Get into the mind of a programmer.</p>
+          <p className="m-0">Enjoy the creativity of the minds of music enthusiast.</p>
         </div>
         <div>
           {Auth.loggedIn() ? (
             <>
-              <span>Hey there, {Auth.getProfile().data.username}!</span>
+              <span>Hello, {Auth.getProfile().data.username}!</span>
               <button className="btn btn-lg btn-light m-2" onClick={logout}>
                 Logout
               </button>
@@ -29,8 +29,8 @@ const Header = () => {
               <Link className="btn btn-lg btn-info m-2" to="/login">
                 Login
               </Link>
-              <Link className="btn btn-lg btn-light m-2" to="/signup">
-                Signup
+              <Link className="btn btn-lg btn-light m-2" to="/register">
+                Register
               </Link>
             </>
           )}

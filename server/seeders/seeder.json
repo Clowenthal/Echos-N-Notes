@@ -1,0 +1,52 @@
+[
+  {
+    "username": "Katie @ Substack",
+    "email": "katiesubstrack@yahoo.com",
+    "password": "password01"
+  },
+  {
+    "username": "Colin Medwick",
+    "email": "colmedwick@yahoo.com",
+    "password": "password02"
+  },
+  {
+    "username": "Amaya Lim",
+    "email": "amayalim@yahoo.com",
+    "password": "password03"
+  },
+  {
+    "username": "Kevin Alexander",
+    "email": "kevinalex@yahoo.com",
+    "password": "password04"
+  },
+  {
+    "username": "Ken Warshaw",
+    "email": "kenwarshaw@yahoo.com",
+    "password": "password05"
+  },
+  {
+    "username": "FogChaser",
+    "email": "fogchaser@yahoo.com",
+    "password": "password06"
+  },
+  {
+    "username": "Robert C. Gilbert",
+    "email": "robcgilbert@yahoo.com",
+    "password": "password07"
+  },
+  {
+    "username": "Leo Mascaro",
+    "email": "leomascaro@yahoo.com",
+    "password": "password08"
+  },
+  {
+    "username": "Natalie Myrick",
+    "email": "natmyrick@yahoo.com",
+    "password": "password09"
+  },
+  {
+    "username": "Jason Tate",
+    "email": "jasontate@yahoo.com",
+    "password": "password10"
+  }
+]

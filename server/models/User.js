@@ -19,10 +19,10 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  thoughts: [
+  blogPosts: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Thought',
+      ref: 'BlogPost',
     },
   ],
 });
@@ -32,7 +32,6 @@ userSchema.pre('save', async function (next) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
-
   next();
 });
 
@@ -43,3 +42,6 @@ userSchema.methods.isCorrectPassword = async function (password) {
 const User = model('User', userSchema);
 
 module.exports = User;
+
+
+
