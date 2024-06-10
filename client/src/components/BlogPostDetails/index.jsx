@@ -1,31 +1,35 @@
-import React from 'react';  // Import React library
-import { useQuery } from '@apollo/client';  // Import useQuery hook from Apollo Client
-import { useParams } from 'react-router-dom';  // Import useParams to get URL parameters
-import { GET_BLOG_POST } from '../utils/queries';  // Import GET_BLOG_POST query
+import { useQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
+import { GET_POST_BLOG } from '../../utils/queries';  // Ensure this path is correct
 
 function BlogPostDetails() {
-  const { id } = useParams();  // Get the blog post ID from the URL parameters
-  const { loading, error, data } = useQuery(GET_BLOG_POST, { variables: { id } });  // Use Apollo Client's useQuery hook to fetch data
+  const { id } = useParams();
+  const { loading, error, data } = useQuery(GET_POST_BLOG, {
+    variables: { id },
+  });
 
-  if (loading) return <p>Loading...</p>;  // Show loading message while fetching
-  if (error) return <p>Error: {error.message}</p>;  // Show error message if fetch fails
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  const post = data.blogPost;  // Get the blog post data from the query result
+  const blogPost = data.getPostBlog;
 
   return (
     <div>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-      <p>Posted by {post.user.username} on {new Date(post.date).toLocaleDateString()}</p>
-      <h2>Comments</h2>
-      {post.comments.map(comment => (  // Map over comments and render them
-        <div key={comment.id}>
-          <p>{comment.content}</p>
-          <p>Commented by {comment.user.username} on {new Date(comment.date).toLocaleDateString()}</p>
-        </div>
-      ))}
+      <h2>{blogPost.title}</h2>
+      <p>{blogPost.content}</p>
+      <p>By: {blogPost.author.username}</p>
+      <p>Posted on: {new Date(blogPost.createdAt).toLocaleDateString()}</p>
+      <div>
+        <h3>Comments</h3>
+        {blogPost.comments.map((comment) => (
+          <div key={comment._id}>
+            <p>{comment.commentText}</p>
+            <p>By: {comment.username} on {new Date(comment.createdAt).toLocaleDateString()}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default BlogPostDetails;  // Export BlogPostDetails component
+export default BlogPostDetails;

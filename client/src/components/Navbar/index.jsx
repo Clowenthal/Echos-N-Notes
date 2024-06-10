@@ -1,24 +1,23 @@
-import React from 'react';  // Import React
 import { Link } from 'react-router-dom';  // Import Link component from React Router
-import Auth from '../utils/auth';
 
 function Navbar() {
-  const loggedIn = Auth.loggedIn();
 
   return (
     <nav>
-      <Link to="/">Home</Link>
-      {loggedIn ? (
-        <>
-          <span>{Auth.getProfile().email}</span>
-          <button onClick={() => Auth.logout()}>Logout</button>
-        </>
-      ) : (
-        <>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
           <Link to="/login">Login</Link>
+        </li>
+        <li>
           <Link to="/register">Register</Link>
-        </>
-      )}
+        </li>
+        <li>
+          <Link to="/post">Post Blog</Link>
+        </li>
+      </ul>
     </nav>
   );
 }

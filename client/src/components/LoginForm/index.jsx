@@ -1,4 +1,4 @@
-import React, { useState } from 'react';  // Import React and useState
+import { useState } from 'react';  // Import React and useState
 import { useMutation } from '@apollo/client';  // Import useMutation hook from Apollo Client
 import { LOGIN } from '../utils/mutations';  // Import LOGIN mutation
 import Auth from '../utils/auth';
@@ -6,7 +6,7 @@ import Auth from '../utils/auth';
 function LoginForm() {
   const [email, setEmail] = useState('');  // State to store email
   const [password, setPassword] = useState('');  // State to store password
-  const [login, { loading, error }] = useMutation(LOGIN);  // Use Apollo Client's useMutation hook
+  const [login] = useMutation(LOGIN);  // Use Apollo Client's useMutation hook
 
   const handleSubmit = async (e) => {  // Handle form submission
     e.preventDefault();
@@ -20,28 +20,16 @@ function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}  // Update email state on input change
-          required
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}  // Update password state on input change
-          required
-        />
-      </div>
-      <button type="submit" disabled={loading}>Login</button>  // Disable button while loading
-      {error && <p>Error: {error.message}</p>}  // Show error message if login fails
+      <label>
+        Email:
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Password:
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </label>
+      <button type="submit">Login</button>
+      {/* {Insert additional form-related comments here} */}
     </form>
   );
 }

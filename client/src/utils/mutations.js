@@ -1,46 +1,63 @@
-import { gql } from '@apollo/client';  // Import gql function from Apollo Client
+import { gql } from '@apollo/client';
 
-// GraphQL mutation for login
-export const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password)
-  }
-`;
-
-// GraphQL mutation for registration
-export const REGISTER = gql`
-  mutation Register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      id
+export const LOGIN_USER = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+      }
     }
   }
 `;
 
-// GraphQL mutation to add a new blog post
+export const ADD_USER = gql`
+  mutation addUser($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
+
 export const ADD_BLOG_POST = gql`
-  mutation AddBlogPost($userId: ID!, $title: String!, $content: String!) {
+  mutation addBlogPost($userId: ID!, $title: String!, $content: String!) {
     addBlogPost(userId: $userId, title: $title, content: $content) {
-      id
+      _id
       title
       content
-      date
+      createdAt
       user {
         username
+      }
+      comments {
+        _id
+        commentText
+        createdAt
       }
     }
   }
 `;
 
-// GraphQL mutation to add a comment to a blog post
 export const ADD_COMMENT = gql`
-  mutation AddComment($postId: ID!, $userId: ID!, $content: String!) {
-    addComment(postId: $postId, userId: $userId, content: $content) {
-      id
-      content
-      date
-      user {
-        username
-      }
+  mutation addComment(
+    $blogPostId: ID!,
+    $commentText: String!,
+    $commentAuthor: String!
+  ) {
+    addComment(
+      blogPostId: $blogPostId,
+      commentText: $commentText,
+      commentAuthor: $commentAuthor
+    ) {
+      _id
+      commentText
+      commentAuthor
+      createdAt
     }
   }
 `;

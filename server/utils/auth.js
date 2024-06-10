@@ -1,20 +1,40 @@
-const { GraphQLError } = require('graphql');  // Import GraphQLError from graphql
-const jwt = require('jsonwebtoken');  // Import jwt for token handling
+const jwt = require('jsonwebtoken');
+const { AuthenticationError } = require('apollo-server-express');
 
-const secret = 'mysecretssshhhhhhh';  // Secret key for JWT
-const expiration = '2h';  // Token expiration time
+const secret = 'mysecretssshhhhhhh';
+const expiration = '2h';
 
 module.exports = {
-  // Custom authentication error
-  AuthenticationError: new GraphQLError('Could not authenticate user.', {
-    extensions: {
-      code: 'UNAUTHENTICATED',
-    },
-  }),
-  // Function to sign a token with user data
+  // Middleware for Express
+  authMiddleware: ({ req }) => {
+    let token = req.body.token || req.query.token || req.headers.authorization;
+
+    if (req.headers.authorization) {
+      token = token.split(' ').pop().trim();
+    }
+
+    if (!token) {
+      return req;
+    }
+
+    try {
+      const { data } = jwt.verify(token, secret, { maxAge: expiration });
+      req.user = data;
+    } catch {
+      console.log('Invalid token');
+    }
+
+    return req;
+  },
+
+  // JWT Token Handling
   signToken: function ({ email, username, _id }) {
-    const payload = { email, username, _id };  // Create payload with user data
-    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });  // Sign and return token
+    const payload = { email, username, _id };
+    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+  },
+
+  // Function to decode the token (used on client side)
+  decodeToken: function (token) {
+    return jwt.decode(token);
   },
 };
-

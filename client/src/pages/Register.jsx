@@ -1,83 +1,99 @@
-import React, { useState } from 'react';  // Import React and useState
-import { gql, request } from 'graphql-request';  // Import GraphQL request functions
+import { useState } from 'react';  // Import React and useState
+import { useMutation } from '@apollo/client';
+import { Link } from 'react-router-dom';
+import { ADD_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
-const REGISTER = gql`  // Define GraphQL mutation for registration
-  mutation Register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      id
-    }
-  }
-`;
 
-function Register() {
-  const [username, setUsername] = useState('');  // State to store username
-  const [email, setEmail] = useState('');  // State to store email
-  const [password, setPassword] = useState('');  // State to store password
-  const [message, setMessage] = useState('');  // State to store message
+const Register = () => {
+  const [formState, setFormState] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [addUser, { error, data }] = useMutation(ADD_USER);
 
-  const handleChange = (e) => {  // Handle input change
-    const { name, value } = e.target;
-    if (name === 'username') {
-      setUsername(value);  // Update username state
-    } else if (name === 'email') {
-      setEmail(value);  // Update email state
-    } else if (name === 'password') {
-      setPassword(value);  // Update password state
-    }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = async (e) => {  // Handle form submission
-    e.preventDefault();
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formState);
+
     try {
-      await request(import.meta.env.VITE_GRAPHQL_ENDPOINT, REGISTER, { username, email, password });  // Send registration request to GraphQL endpoint
-      setMessage('Registration successful!');  // Set success message
-      setUsername('');  // Clear username state
-      setEmail('');  // Clear email state
-      setPassword('');  // Clear password state
-    } catch (error) {
-      setMessage('Registration failed. Please try again.');  // Set error message
+      const { data } = await addUser({
+        variables: { ...formState },
+      });
+
+      Auth.login(data.addUser.token);
+    } catch (e) {
+      console.error(e);
     }
   };
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={username}
-            onChange={handleChange}
-            required
-          />
+    <main className="flex-row justify-center mb-4">
+      <div className="col-12 col-lg-10">
+        <div className="card">
+          <h4 className="card-header bg-dark text-light p-2">Sign Up</h4>
+          <div className="card-body">
+            {data ? (
+              <p>
+                Success! You may now head{' '}
+                <Link to="/">back to the homepage.</Link>
+              </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
+                <input
+                  className="form-input"
+                  placeholder="Your username"
+                  name="username"
+                  type="text"
+                  value={formState.name}
+                  onChange={handleChange}
+                />
+                <input
+                  className="form-input"
+                  placeholder="Your email"
+                  name="email"
+                  type="email"
+                  value={formState.email}
+                  onChange={handleChange}
+                />
+                <input
+                  className="form-input"
+                  placeholder="******"
+                  name="password"
+                  type="password"
+                  value={formState.password}
+                  onChange={handleChange}
+                />
+                <button
+                  className="btn btn-block btn-primary"
+                  style={{ cursor: 'pointer' }}
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </form>
+            )}
+
+            {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {error.message}
+              </div>
+            )}
+          </div>
         </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Register</button>
-      </form>
-      {message && <p>{message}</p>}  // Render message if it exists
-    </div>
+      </div>
+    </main>
   );
-}
+};
 
 export default Register;  // Export Register component

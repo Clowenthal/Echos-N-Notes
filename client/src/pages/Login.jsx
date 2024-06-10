@@ -1,68 +1,94 @@
-import React, { useState } from 'react';  // Import React and useState
-import { gql, request } from 'graphql-request';  // Import GraphQL request functions
+import { useState } from 'react';  // Import React and useState
+import { Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client';  // Import GraphQL request functions
+import { LOGIN_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
-const LOGIN = gql`  // Define GraphQL mutation for login
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password)
-  }
-`;
+const Login = () => {
+  const [formState, setFormState] = useState({ email: '', password: '' });
+  const [login, { error, data }] = useMutation(LOGIN_USER);
 
-function Login() {
-  const [email, setEmail] = useState('');  // State to store email
-  const [password, setPassword] = useState('');  // State to store password
-  const [message, setMessage] = useState('');  // State to store message
 
-  const handleChange = (e) => {  // Handle input change
-    const { name, value } = e.target;
-    if (name === 'email') {
-      setEmail(value);  // Update email state
-    } else if (name === 'password') {
-      setPassword(value);  // Update password state
-    }
+  // update state based on form input changes
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = async (e) => {  // Handle form submission
-    e.preventDefault();
+  // submit form
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formState);
     try {
-      const data = await request(import.meta.env.VITE_GRAPHQL_ENDPOINT, LOGIN, { email, password });  // Send login request to GraphQL endpoint
-      localStorage.setItem('token', data.login);  // Save JWT token in localStorage
-      setMessage('Login successful!');  // Set success message
-      setEmail('');  // Clear email state
-      setPassword('');  // Clear password state
-    } catch (error) {
-      setMessage('Login failed. Please check your credentials.');  // Set error message
+      const { data } = await login({
+        variables: { ...formState },
+      });
+
+      Auth.login(data.login.token);
+    } catch (e) {
+      console.error(e);
     }
+
+    // clear form values
+    setFormState({
+      email: '',
+      password: '',
+    });
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-            required
-          />
+    <main className="flex-row justify-center mb-4">
+      <div className="col-12 col-lg-10">
+        <div className="card">
+          <h4 className="card-header bg-dark text-light p-2">Login</h4>
+          <div className="card-body">
+            {data ? (
+              <p>
+                Success! You may now head{' '}
+                <Link to="/">back to the homepage.</Link>
+              </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
+                <input
+                  className="form-input"
+                  placeholder="Your email"
+                  name="email"
+                  type="email"
+                  value={formState.email}
+                  onChange={handleChange}
+                />
+                <input
+                  className="form-input"
+                  placeholder="******"
+                  name="password"
+                  type="password"
+                  value={formState.password}
+                  onChange={handleChange}
+                />
+                <button
+                  className="btn btn-block btn-primary"
+                  style={{ cursor: 'pointer' }}
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </form>
+            )}
+
+            {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {error.message}
+              </div>
+            )}
+          </div>
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {message && <p>{message}</p>}  // Render message if it exists
-    </div>
+      </div>
+    </main>
   );
-}
+};
 
 export default Login;  // Export Login component

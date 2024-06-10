@@ -1,28 +1,51 @@
-import React from 'react';  // Import React
-import { Route, Switch } from 'react-router-dom';  // Import Route and Switch components from React Router
-import Navbar from './components/Navbar/index';  // Import Navbar component
-import Home from './pages/Home';  // Import Home page component
-import BlogPost from './pages/BlogPost';  // Import BlogPost page component
-import Login from './pages/Login';  // Import Login page component
-import Register from './pages/Register';  // Import Register page component
-import ErrorPage from './pages/ErrorPage';  // Import ErrorPage component
-import Footer from './components/Footer/index';  // Import Footer component
+import './App.css';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { Outlet } from 'react-router-dom';
+import Header from './components/Header/index';
+import Footer from './components/Footer/index';
+
+// Construct our main GraphQL API endpoint
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+// Construct request middleware that will attach the JWT token to every request as an `authorization` header
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('id_token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />  // Render Navbar component
-      <Switch>
-        <Route exact path="/" component={Home} />  // Route for Home page
-        <Route path="/post/:id" component={BlogPost} />  // Route for BlogPost page
-        <Route path="/login" component={Login} />  // Route for Login page
-        <Route path="/register" component={Register} />  // Route for Register page
-        <Route component={ErrorPage} />  // Route for any other path to show ErrorPage
-      </Switch>
-      <Footer />  // Render Footer component
-    </div>
+    <ApolloProvider client={client}>
+      <div className="flex-column justify-flex-start min-100-vh">
+        <Header />
+        <div className="container">
+          <Outlet />
+        </div>
+        <Footer />
+      </div>
+    </ApolloProvider>
   );
 }
 
-export default App;  // Export App component
-
+export default App;

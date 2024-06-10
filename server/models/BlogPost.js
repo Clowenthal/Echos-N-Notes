@@ -1,27 +1,49 @@
-const mongoose = require('mongoose');  // Import mongoose
-const dateFormat = require('../utils/dateFormat');  // Import date formatting utility
+// server/models/BlogPost.js
+const { Schema, model } = require('mongoose');
+const dateFormat = require('../utils/dateFormat');
 
-const BlogPostSchema = new mongoose.Schema({  // Define the BlogPost schema
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // User field referencing User model
-  title: { type: String, required: true },  // Title field
-  content: { type: String, required: true },  // Content field
-  date: {
+const commentSchema = new Schema({
+  commentText: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 280,
+  },
+  commentAuthor: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
     type: Date,
     default: Date.now,
-    get: (timestamp) => dateFormat(timestamp),  // Use date formatting utility for the date field
+    get: (timestamp) => dateFormat(timestamp),
   },
-  comments: [  // Comments array
-    {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // User field in comment referencing User model
-      content: { type: String, required: true },  // Content field in comment
-      date: {
-        type: Date,
-        default: Date.now,
-        get: (timestamp) => dateFormat(timestamp),  // Use date formatting utility for the date field in comments
-      },
-    }
-  ]
 });
 
-module.exports = mongoose.model('BlogPost', BlogPostSchema);  // Export the BlogPost model
+const blogPostSchema = new Schema({
+  title: {
+    type: String,
+    required: 'You need to provide a title!',
+    trim: true,
+  },
+  content: {
+    type: String,
+    required: 'You need to provide content!',
+    minlength: 1,
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    get: (timestamp) => dateFormat(timestamp),
+  },
+  comments: [commentSchema],
+});
 
+const BlogPost = model('BlogPost', blogPostSchema);
+
+module.exports = BlogPost;

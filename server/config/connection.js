@@ -1,16 +1,11 @@
-const mongoose = require('mongoose');  // Import mongoose
+// server/config/connection.js
+const mongoose = require('mongoose');
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/echosnnotes', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');  // Log success message if connected
-  } catch (err) {
-    console.error(err.message);  // Log error message if connection fails
-    process.exit(1);  // Exit process with failure
-  }
-};
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/echos-notes', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-module.exports = connectDB;  // Export the connectDB function
+module.exports = mongoose.connection;
+
+
