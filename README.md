@@ -3,7 +3,7 @@
 ## Description
 A music based blog, where users are able to share their content, insterests as well as comment on other users posts.
 
-(![Project_3_Screenshot](https://github.com/Clowenthal/Echos-N-Notes/assets/153496738/6c9c488f-38a2-4753-87d7-c0a950712c92)
+![Project_3_Screenshot](https://github.com/Clowenthal/Echos-N-Notes/assets/153496738/6c9c488f-38a2-4753-87d7-c0a950712c92)
 
 
 ## Table of Contents
